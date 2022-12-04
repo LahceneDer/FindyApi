@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import compression from "compression";
 import { connectDB } from "./config/db";
+import Routes from "./routes/routes"
 
 dotenv.config();
 const port = process.env.SERVER_PORT;
@@ -14,6 +15,11 @@ connectDB()
 
 app.get('/', (req, res) => {
     res.send('hello')
+})
+
+app.use("/api", Routes)
+app.use("/*", (req, res) => {
+    res.send(' page not found')
 })
 
 
