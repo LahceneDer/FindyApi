@@ -20,23 +20,12 @@ const userSchema = new Schema({
         required: [true, "Username required"]
     },
     email: {
-        type: Types.ObjectId,
+        type: String,
         trim: true,
         lowercase: true,
         unique: true,
-        required: [true, "Category required"],
-        validate: [validateEmail, 'Please fill a valid email address'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
     },
-    password: {
-        type: String,
-        minlength: 6,
-        select: false,
-    },
-    avatarUrl: {
-        type: String,
-        default: "",
-    },
+    password: String,
 })
 
 export default model('User', userSchema)

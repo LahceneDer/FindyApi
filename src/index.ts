@@ -1,5 +1,7 @@
-import dotenv from "dotenv";
 import express from "express";
+import http from "http"
+import cors from "cors";
+import dotenv from "dotenv";
 import compression from "compression";
 import { connectDB } from "./config/db";
 import Routes from "./routes/routes"
@@ -10,6 +12,9 @@ const app = express();
 
 app.use(express.json());
 app.use(compression())
+app.use(cors())
+
+const server = http.createServer(app)
 
 connectDB()
 
@@ -23,7 +28,7 @@ app.use("/*", (req, res) => {
 })
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     // tslint:disable-next-line:no-console
     console.log(`server started at http://localhost:${port}`);
 });
