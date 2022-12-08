@@ -37,7 +37,7 @@ export const registerController = async (req: Request, res: Response) => {
             }
         )
 
-        res.status(201).json({ success: false, data: user, toke: TOKEN })
+        res.status(201).json({ success: true, data: user, token: TOKEN })
     } catch (error) {
         return res.status(500).json({ success: false, data: error })
     }
@@ -47,14 +47,18 @@ export const loginController = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body
 
-        const user = await userModel.findOne({ email: email.toLowerCase() })
+        const user = await userModel.findOne({ email: email.toLowerCase() }).select("+password")
+        console.log(user);
+
         const userPassword: string = user?.password!
+        console.log(userPassword);
+
 
         const match = await bcrypt.compare(password, userPassword)
-
+        let TOKEN = ""
         if (user && match) {
             // send new token
-            const TOKEN = jwt.sign(
+            TOKEN = jwt.sign(
                 {
                     userId: user._id,
                     email
@@ -64,7 +68,9 @@ export const loginController = async (req: Request, res: Response) => {
                     expiresIn: "24h"
                 }
             )
-            return res.status(400).json({ success: false, data: user, token: TOKEN })
+            console.log(TOKEN);
+
+            return res.status(200).json({ success: true, data: user, token: TOKEN })
         }
         return res.status(400).json({ success: false, data: 'Invalid credentials, Please try again' })
     } catch (error) {

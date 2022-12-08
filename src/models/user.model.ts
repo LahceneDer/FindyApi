@@ -25,7 +25,14 @@ const userSchema = new Schema({
         lowercase: true,
         unique: true,
     },
-    password: String,
+    password: {
+        type: String,
+        select: false
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
 export default model('User', userSchema)
